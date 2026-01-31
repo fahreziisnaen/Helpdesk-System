@@ -18,5 +18,4 @@ php artisan route:clear
 php artisan view:clear
 php artisan optimize
 
-php-fpm -D
-nginx -g "daemon off;"
+exec php-fpm

@@ -10,6 +10,8 @@ services:
     volumes:
       - ./src:/var/www
       - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - vendor_data:/var/www/vendor
+      - build_data:/var/www/public/build
     env_file:
       - ./src/.env
     networks:
@@ -26,6 +28,7 @@ services:
     volumes:
       - ./src:/var/www
       - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+      - build_data:/var/www/public/build
     networks:
       - helpdesk-network
     depends_on:
@@ -54,3 +57,5 @@ networks:
 
 volumes:
   db_data:
+  vendor_data:
+  build_data:
