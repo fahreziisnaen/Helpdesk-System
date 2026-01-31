@@ -34,7 +34,13 @@ Sistem informasi helpdesk berbasis web menggunakan Laravel 12 dengan fitur lengk
     cd "Helpdesk System"
     ```
 
-2.  **Jalankan Aplikasi**
+2.  **Setup Environment**
+    Copy file konfigurasi environment:
+    ```bash
+    cp src/.env.example src/.env
+    ```
+
+3.  **Jalankan Aplikasi**
     ```bash
     docker compose --env-file src/.env up -d --build
     ```
