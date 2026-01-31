@@ -54,13 +54,19 @@ Sistem informasi helpdesk berbasis web menggunakan Laravel 12 dengan fitur lengk
 
 Jika Anda ingin menjalankan aplikasi secara manual tanpa Docker:
 
-### 1. Install Dependencies
+### 1. Masuk ke Folder Source
+Semua kode Laravel berada di dalam folder `src`.
+```bash
+cd src
+```
+
+### 2. Install Dependencies
 ```bash
 composer install
 npm install && npm run build
 ```
 
-### 2. Setup Environment
+### 3. Setup Environment
 ```bash
 cp .env.example .env
 php artisan key:generate
@@ -68,19 +74,19 @@ php artisan key:generate
 
 Edit file `.env` dan sesuaikan konfigurasi database.
 
-### 3. Setup Database
+### 4. Setup Database
 Buat database baru di MySQL, lalu jalankan:
 ```bash
 php artisan migrate
 php artisan db:seed
 ```
 
-### 4. Setup Storage
+### 5. Setup Storage
 ```bash
 php artisan storage:link
 ```
 
-### 5. Jalankan Server
+### 6. Jalankan Server
 ```bash
 php artisan serve
 ```
