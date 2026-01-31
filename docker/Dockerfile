@@ -1,9 +1,9 @@
 FROM node:20 as build
 
 WORKDIR /app
-COPY package.json package-lock.json ./
+COPY src/package.json src/package-lock.json ./
 RUN npm ci
-COPY . .
+COPY src .
 RUN npm run build
 
 FROM php:8.2-fpm
@@ -31,10 +31,14 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www
 
 # Copy existing application directory contents
-COPY . /var/www
+COPY src /var/www
 
 # Copy built assets from build stage
 COPY --from=build /app/public/build /var/www/public/build
+
+# Copy entrypoint
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Install PHP dependencies
 RUN composer install --optimize-autoloader --no-dev
@@ -42,9 +46,8 @@ RUN composer install --optimize-autoloader --no-dev
 # Create system user to run Composer and Artisan Commands
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 775 /var/www/storage \
-    && chmod -R 775 /var/www/bootstrap/cache \
-    && chmod +x /var/www/docker/entrypoint.sh
+    && chmod -R 775 /var/www/bootstrap/cache
 
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
-ENTRYPOINT ["/var/www/docker/entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
