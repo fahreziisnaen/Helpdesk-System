@@ -36,12 +36,12 @@ Sistem informasi helpdesk berbasis web menggunakan Laravel 12 dengan fitur lengk
 
 2.  **Jalankan Aplikasi**
     ```bash
-    docker compose up -d --build
+    docker compose --env-file src/.env up -d --build
     ```
     Perintah ini akan otomatis setup database, install dependencies, dan build assets.
 
 3.  **Akses Aplikasi**
-    Buka browser dan akses: `http://localhost` (atau IP server Anda).
+    Buka browser dan akses: `http://localhost:8080` (atau IP server Anda:8080).
 
 ### Perintah Penting (Docker)
 -   **Cek Status Container**: `docker compose ps`

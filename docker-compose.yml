@@ -10,6 +10,8 @@ services:
     volumes:
       - ./src:/var/www
       - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    env_file:
+      - ./src/.env
     networks:
       - helpdesk-network
     depends_on:
@@ -20,7 +22,7 @@ services:
     container_name: helpdesk-web
     restart: always
     ports:
-      - "80:80"
+      - "8080:80"
     volumes:
       - ./src:/var/www
       - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
@@ -39,6 +41,8 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    env_file:
+      - ./src/.env
     volumes:
       - db_data:/var/lib/mysql
     networks:
