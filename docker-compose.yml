@@ -11,7 +11,11 @@ services:
       - ./src:/var/www
       - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
       - vendor_data:/var/www/vendor
+      - vendor_data:/var/www/vendor
       - build_data:/var/www/public/build
+    environment:
+      - DB_HOST=db
+      - DB_CONNECTION=mysql
     env_file:
       - ./src/.env
     networks:
