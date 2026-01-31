@@ -1,0 +1,9 @@
+.git
+.gitignore
+.env
+node_modules
+vendor
+docker-compose.yml
+docker-compose.override.yml
+tests
+storage/*.key
