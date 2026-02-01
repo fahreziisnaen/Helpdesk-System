@@ -11,7 +11,6 @@ services:
       - ./src:/var/www
       - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
       - vendor_data:/var/www/vendor
-      - vendor_data:/var/www/vendor
       - build_data:/var/www/public/build
     environment:
       - DB_HOST=db
@@ -21,7 +20,8 @@ services:
     networks:
       - helpdesk-network
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   web:
     image: nginx:alpine
@@ -54,6 +54,11 @@ services:
       - db_data:/var/lib/mysql
     networks:
       - helpdesk-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
 networks:
   helpdesk-network:
