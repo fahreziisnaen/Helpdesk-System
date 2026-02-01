@@ -18,4 +18,8 @@ php artisan route:clear
 php artisan view:clear
 php artisan optimize
 
+# Fix permissions for storage and cache (crucial for bind mounts)
+chmod -R 777 /var/www/storage
+chmod -R 777 /var/www/bootstrap/cache
+
 exec php-fpm
