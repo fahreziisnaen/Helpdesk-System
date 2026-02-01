@@ -43,11 +43,11 @@ services:
     container_name: helpdesk-db
     restart: always
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_DATABASE: helpdesk_system
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_PASSWORD: user_password
+      MYSQL_USER: helpdesk
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
     env_file:
       - ./src/.env
     volumes:
