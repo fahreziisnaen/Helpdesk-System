@@ -30,8 +30,17 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www
 
+# Copy composer files first for layer caching
+COPY src/composer.json src/composer.lock ./
+
+# Install PHP dependencies (this layer will be cached unless composer files change)
+RUN composer install --no-scripts --no-autoloader --no-dev
+
 # Copy existing application directory contents
 COPY src /var/www
+
+# Run composer dump-autoload now that source is copied
+RUN composer dump-autoload --optimize --no-dev
 
 # Copy built assets from build stage
 COPY --from=build /app/public/build /var/www/public/build
@@ -39,9 +48,6 @@ COPY --from=build /app/public/build /var/www/public/build
 # Copy entrypoint
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
-
-# Install PHP dependencies
-RUN composer install --optimize-autoloader --no-dev
 
 # Create system user to run Composer and Artisan Commands
 RUN chown -R www-data:www-data /var/www \
