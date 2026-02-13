@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'whatsapp' => [
+        'url' => env('WHATSAPP_GATEWAY_URL', 'http://whatsapp:3000'),
+    ],
+
 ];

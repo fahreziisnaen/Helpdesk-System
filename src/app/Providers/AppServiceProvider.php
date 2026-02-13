@@ -19,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        \App\Models\Ticket::observe(\App\Observers\TicketObserver::class);
+        \App\Models\Message::observe(\App\Observers\MessageObserver::class);
     }
 }

@@ -60,6 +60,18 @@ services:
       timeout: 5s
       retries: 20
 
+  whatsapp:
+    build:
+      context: ./whatsapp-gateway
+    container_name: helpdesk-whatsapp
+    restart: always
+    volumes:
+      - ./whatsapp-gateway/whatsapp_info:/app/whatsapp_info
+    ports:
+      - "3000:3000"
+    networks:
+      - helpdesk-network
+
 networks:
   helpdesk-network:
     driver: bridge

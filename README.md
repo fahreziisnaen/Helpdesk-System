@@ -42,11 +42,11 @@ Sistem informasi helpdesk berbasis web menggunakan Laravel 12 dengan fitur lengk
 
 3.  **Jalankan Aplikasi**
     ```bash
-    docker compose --env-file src/.env up -d --build
+    docker compose up -d --build
     ```
     Perintah ini akan otomatis setup database, install dependencies, dan build assets.
 
-3.  **Akses Aplikasi**
+4.  **Akses Aplikasi**
     Buka browser dan akses: `http://localhost:8080` (atau IP server Anda:8080).
 
 ### Perintah Penting (Docker)
@@ -96,6 +96,13 @@ php artisan storage:link
 ```bash
 php artisan serve
 ```
+
+### 7. Setup WhatsApp Gateway (Opsional)
+Jika ingin menggunakan fitur WhatsApp:
+1. Masuk ke folder gateway: `cd ../whatsapp-gateway`
+2. Install dependencies: `npm install`
+3. Jalankan gateway: `npm start`
+4. Di file `.env` Laravel, tambahkan: `WHATSAPP_GATEWAY_URL=http://localhost:3000`
 
 ## License
 

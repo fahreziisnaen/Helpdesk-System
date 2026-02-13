@@ -9,6 +9,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\WhatsAppController;
 use Illuminate\Support\Facades\Route;
 
 // Auth Routes
@@ -60,5 +61,12 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:admin')->group(function () {
         Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
         Route::post('reports/generate', [ReportController::class, 'generate'])->name('reports.generate');
+    });
+
+    // WhatsApp Settings (Admin Only)
+    Route::middleware('role:admin')->prefix('admin/whatsapp')->name('admin.whatsapp.')->group(function () {
+        Route::get('/', [WhatsAppController::class, 'index'])->name('index');
+        Route::post('/store', [WhatsAppController::class, 'store'])->name('store');
+        Route::post('/reset', [WhatsAppController::class, 'reset'])->name('reset');
     });
 });

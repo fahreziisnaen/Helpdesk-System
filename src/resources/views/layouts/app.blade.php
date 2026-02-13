@@ -54,6 +54,11 @@
                         <i class="fas fa-chart-bar"></i> Laporan
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('admin.whatsapp.index') }}" class="{{ request()->routeIs('admin.whatsapp.*') ? 'active' : '' }}">
+                        <i class="fab fa-whatsapp"></i> Konfigurasi WhatsApp
+                    </a>
+                </li>
                 @endif
                 
                 <li>

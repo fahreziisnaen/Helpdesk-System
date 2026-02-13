@@ -1,0 +1,10 @@
+# Root level ignores
+.env
+src/.env
+whatsapp-gateway/node_modules/
+whatsapp-gateway/whatsapp_info/*
+!whatsapp-gateway/whatsapp_info/.gitignore
+
+# Mac/OSX
+.DS_Store
+Thumbs.db
