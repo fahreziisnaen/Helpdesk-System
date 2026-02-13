@@ -15,8 +15,7 @@ services:
     environment:
       - DB_HOST=db
       - DB_CONNECTION=mysql
-    env_file:
-      - ./src/.env
+      - APP_KEY_AUTO_GENERATE=true
     networks:
       - helpdesk-network
     depends_on:

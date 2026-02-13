@@ -7,7 +7,7 @@ PROJECT_ROOT="$ENTRYPOINT_DIR/../src" # Should be /var/www
 cd /var/www
 
 # Force delete ANY stale cache files immediately
-rm -f bootstrap/cache/*.php
+rm -rf bootstrap/cache/*.php
 
 # Strip Windows CRLF line endings from .env if it exists
 if [ -f .env ]; then
@@ -22,20 +22,21 @@ fi
 # Ensure .env is writable
 chmod 666 .env || true
 
-# Check for empty APP_KEY or missing line
-# We use a more robust way to check for a valid key length
-KEY_VAL=$(grep "^APP_KEY=" .env | cut -d '=' -f 2 | tr -d ' ' | tr -d '\r')
-if [ -z "$KEY_VAL" ] || [ ${#KEY_VAL} -lt 40 ]; then
+# Check for empty APP_KEY
+# If APP_KEY is missing or empty, generate it.
+if ! grep -q "^APP_KEY=base64:" .env; then
     echo "Generating new APP_KEY..."
-    # Ensure line exists
+    # Ensure line exists for artisan to replace
     if ! grep -q "^APP_KEY=" .env; then
-        echo "" >> .env
         echo "APP_KEY=" >> .env
     fi
     php artisan key:generate --force
 fi
 
-# Clear and rebuild cache to be absolutely sure
+# IMPORTANT: Export the key to the current process so artisan migrate can see it
+export APP_KEY=$(grep "^APP_KEY=" .env | cut -d '=' -f 2)
+
+# Clear everything
 php artisan config:clear
 php artisan cache:clear
 php artisan view:clear
