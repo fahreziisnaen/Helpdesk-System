@@ -23,7 +23,7 @@ class TicketObserver
         $message = "🎫 *TIKET BARU*\n\n";
         $message .= "• *Nomor:* {$ticket->ticket_number}\n";
         $message .= "• *Judul:* {$ticket->title}\n";
-        $message .= "• *User:* {$ticket->user->name}" . ($ticket->user->company ? " ({$ticket->user->company})" : "") . "\n";
+        $message .= "• *User:* {$ticket->user->name}" . ($ticket->user->perusahaan ? " ({$ticket->user->perusahaan})" : "") . "\n";
         $message .= "• *Kategori:* " . ($ticket->categoryModel ? $ticket->categoryModel->name : 'N/A') . "\n";
         $message .= "• *Prioritas:* " . strtoupper($ticket->priority) . "\n";
         $message .= "• *Deskripsi:* {$ticket->description}\n\n";

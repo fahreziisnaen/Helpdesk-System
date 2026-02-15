@@ -107,9 +107,13 @@ app.post('/reset', (req, res) => {
     console.log('Reset request received. Clearing session and restarting...');
     if (fs.existsSync(AUTH_PATH)) {
         try {
-            fs.rmSync(AUTH_PATH, { recursive: true, force: true });
+            const files = fs.readdirSync(AUTH_PATH);
+            for (const file of files) {
+                fs.rmSync(path.join(AUTH_PATH, file), { recursive: true, force: true });
+            }
+            console.log('Session contents cleared successfully.');
         } catch (err) {
-            console.error('Error deleting auth path:', err);
+            console.error('Error clearing session contents:', err);
         }
     }
     connectionStatus = 'disconnected';

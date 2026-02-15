@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@fc-network.com',
             'phone' => '081234567890',
-            'company' => 'FC Network',
+            'perusahaan' => 'FC Network',
             'password' => Hash::make('password'),
             'role' => 'admin',
             'is_active' => true,
@@ -26,7 +26,7 @@ class UserSeeder extends Seeder
             'name' => 'Teknisi 1',
             'email' => 'teknisi1@fc-network.com',
             'phone' => '081234567891',
-            'company' => 'FC Network Support',
+            'perusahaan' => 'FC Network Support',
             'password' => Hash::make('password'),
             'role' => 'teknisi',
             'is_active' => true,
@@ -36,7 +36,7 @@ class UserSeeder extends Seeder
             'name' => 'Teknisi 2',
             'email' => 'teknisi2@fc-network.com',
             'phone' => '081234567892',
-            'company' => 'FC Network Support',
+            'perusahaan' => 'FC Network Support',
             'password' => Hash::make('password'),
             'role' => 'teknisi',
             'is_active' => true,
@@ -44,20 +44,20 @@ class UserSeeder extends Seeder
 
         // Users (Customers)
         User::create([
-            'name' => 'Budi Santoso',
-            'email' => 'customer1@example.com',
+            'name' => 'User 1',
+            'email' => 'user1@fc-network.com',
             'phone' => '081234567893',
-            'company' => 'PT Maju Jaya',
+            'perusahaan' => 'PT Pertamina gas',
             'password' => Hash::make('password'),
             'role' => 'user',
             'is_active' => true,
         ]);
 
         User::create([
-            'name' => 'Siti Aminah',
-            'email' => 'customer2@example.com',
+            'name' => 'User 2',
+            'email' => 'user2@fc-network.com',
             'phone' => '081234567894',
-            'company' => 'CV Sejahtera',
+            'perusahaan' => 'PT Pertamina gas',
             'password' => Hash::make('password'),
             'role' => 'user',
             'is_active' => true,

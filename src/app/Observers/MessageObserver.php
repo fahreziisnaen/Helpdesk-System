@@ -23,8 +23,8 @@ class MessageObserver
         $user = $message->user;
 
         $senderInfo = "{$user->name}";
-        if ($user->company) {
-            $senderInfo .= " ({$user->company})";
+        if ($user->perusahaan) {
+            $senderInfo .= " ({$user->perusahaan})";
         }
 
         $waMessage = "💬 *PESAN BARU PADA TIKET #{$ticket->ticket_number}*\n\n";
