@@ -88,6 +88,8 @@ class UserController extends Controller
         $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
+            'phone' => 'nullable|string|max:20',
+            'perusahaan' => 'nullable|string|max:255',
         ];
 
         // Admin can update role

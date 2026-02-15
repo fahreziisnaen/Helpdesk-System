@@ -24,6 +24,14 @@
             <strong>Email:</strong> {{ $user->email }}
         </div>
         <div class="mb-3">
+            <strong>No. Telepon:</strong> {{ $user->phone ?? '-' }}
+        </div>
+        @if($user->isUser())
+        <div class="mb-3">
+            <strong>Perusahaan:</strong> {{ $user->perusahaan ?? '-' }}
+        </div>
+        @endif
+        <div class="mb-3">
             <strong>Role:</strong> <span class="badge badge-primary">{{ ucfirst($user->role) }}</span>
         </div>
         <div class="mb-3">

@@ -45,12 +45,37 @@
 
             <div class="form-group">
                 <label class="form-label">Role</label>
-                <select name="role" class="form-select" required>
+                <select name="role" id="role-select" class="form-select" required onchange="togglePerusahaanField()">
                     <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                     <option value="teknisi" {{ old('role') == 'teknisi' ? 'selected' : '' }}>Teknisi</option>
                     <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>User</option>
                 </select>
             </div>
+            
+            <div class="form-group">
+                <label class="form-label">No. Telepon (WhatsApp)</label>
+                <input type="text" name="phone" class="form-control" value="{{ old('phone') }}" placeholder="Contoh: 08123456789">
+            </div>
+            
+            <div class="form-group" id="perusahaan-field" style="display: none;">
+                <label class="form-label">Perusahaan</label>
+                <input type="text" name="perusahaan" class="form-control" value="{{ old('perusahaan') }}" placeholder="Nama Perusahaan">
+            </div>
+
+            <script>
+                function togglePerusahaanField() {
+                    const role = document.getElementById('role-select').value;
+                    const field = document.getElementById('perusahaan-field');
+                    if (role === 'user') {
+                        field.style.display = 'block';
+                    } else {
+                        field.style.display = 'none';
+                    }
+                }
+                
+                // Initial check
+                document.addEventListener('DOMContentLoaded', togglePerusahaanField);
+            </script>
 
             <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-primary">

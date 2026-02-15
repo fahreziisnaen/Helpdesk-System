@@ -32,6 +32,7 @@
                 <tr>
                     <th>Nama</th>
                     <th>Email</th>
+                    <th>Perusahaan</th>
                     <th>Role</th>
                     <th>Status</th>
                     <th>Tanggal Dibuat</th>
@@ -43,6 +44,7 @@
                 <tr>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
+                    <td>{{ $user->perusahaan ?? '-' }}</td>
                     <td><span class="badge badge-primary">{{ ucfirst($user->role) }}</span></td>
                     <td>
                         <span class="badge {{ $user->is_active ? 'badge-success' : 'badge-danger' }}">

@@ -24,6 +24,8 @@ class StoreUserRequest extends FormRequest
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|in:admin,teknisi,user',
+            'phone' => 'nullable|string|max:20',
+            'perusahaan' => 'nullable|string|max:255',
         ];
     }
 }

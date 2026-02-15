@@ -27,13 +27,41 @@
             @if(auth()->user()->isAdmin() && $user->id !== auth()->id())
             <div class="form-group">
                 <label class="form-label">Role</label>
-                <select name="role" class="form-select" required>
+                <select name="role" id="role-select" class="form-select" required onchange="togglePerusahaanField()">
                     <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
                     <option value="teknisi" {{ old('role', $user->role) == 'teknisi' ? 'selected' : '' }}>Teknisi</option>
                     <option value="user" {{ old('role', $user->role) == 'user' ? 'selected' : '' }}>User</option>
                 </select>
             </div>
+            @else
+                <input type="hidden" name="role" id="role-select" value="{{ $user->role }}">
             @endif
+
+            <div class="form-group">
+                <label class="form-label">No. Telepon (WhatsApp)</label>
+                <input type="text" name="phone" class="form-control" value="{{ old('phone', $user->phone) }}" placeholder="Contoh: 08123456789">
+            </div>
+            
+            <div class="form-group" id="perusahaan-field" style="display: none;">
+                <label class="form-label">Perusahaan</label>
+                <input type="text" name="perusahaan" class="form-control" value="{{ old('perusahaan', $user->perusahaan) }}" placeholder="Nama Perusahaan">
+            </div>
+
+            <script>
+                function togglePerusahaanField() {
+                    const roleSelect = document.getElementById('role-select');
+                    const role = roleSelect ? roleSelect.value : '{{ $user->role }}';
+                    const field = document.getElementById('perusahaan-field');
+                    if (role === 'user') {
+                        field.style.display = 'block';
+                    } else {
+                        field.style.display = 'none';
+                    }
+                }
+                
+                // Initial check
+                document.addEventListener('DOMContentLoaded', togglePerusahaanField);
+            </script>
 
             <div class="form-group">
                 <label class="form-label">Password Baru (Kosongkan jika tidak ingin mengubah)</label>
