@@ -23,13 +23,20 @@ class TicketObserver
         $message = "🎫 *TIKET BARU*\n\n";
         $message .= "• *Nomor:* {$ticket->ticket_number}\n";
         $message .= "• *Judul:* {$ticket->title}\n";
-        $message .= "• *User:* {$ticket->user->name}\n";
+        $message .= "• *User:* {$ticket->user->name}" . ($ticket->user->company ? " ({$ticket->user->company})" : "") . "\n";
         $message .= "• *Kategori:* " . ($ticket->categoryModel ? $ticket->categoryModel->name : 'N/A') . "\n";
         $message .= "• *Prioritas:* " . strtoupper($ticket->priority) . "\n";
         $message .= "• *Deskripsi:* {$ticket->description}\n\n";
         $message .= "_Dikirim otomatis oleh Sistem Helpdesk_";
 
+        // Send to Group
         $this->whatsapp->sendMessage($message);
+
+        // Send confirmation to Customer
+        if ($ticket->user->phone) {
+            $customerMsg = "Halo {$ticket->user->name}, tiket Anda #{$ticket->ticket_number} telah kami terima. Teknisi kami akan segera memprosesnya.\n\n" . $message;
+            $this->whatsapp->sendMessage($customerMsg, $ticket->user->phone);
+        }
     }
 
     /**
@@ -45,7 +52,19 @@ class TicketObserver
             $message .= "• *Teknisi:* " . ($ticket->assignedTechnician ? $ticket->assignedTechnician->name : 'Belum Ditugaskan') . "\n\n";
             $message .= "Silakan cek dashboard untuk update selengkapnya.";
 
+            // Send to Group
             $this->whatsapp->sendMessage($message);
+
+            // Send to Customer
+            if ($ticket->user->phone) {
+                $this->whatsapp->sendMessage($message, $ticket->user->phone);
+            }
+
+            // If a technician was just assigned, notify them personally
+            if ($ticket->wasChanged('assigned_to') && $ticket->assignedTechnician && $ticket->assignedTechnician->phone) {
+                $techMsg = "Halo {$ticket->assignedTechnician->name}, Anda telah ditugaskan untuk menangani tiket baru:\n\n" . $message;
+                $this->whatsapp->sendMessage($techMsg, $ticket->assignedTechnician->phone);
+            }
         }
     }
 }

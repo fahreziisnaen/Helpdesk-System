@@ -104,16 +104,32 @@ app.post('/send', async (req, res) => {
 });
 
 app.post('/reset', (req, res) => {
+    console.log('Reset request received. Clearing session and restarting...');
     if (fs.existsSync(AUTH_PATH)) {
-        fs.rmSync(AUTH_PATH, { recursive: true, force: true });
+        try {
+            fs.rmSync(AUTH_PATH, { recursive: true, force: true });
+        } catch (err) {
+            console.error('Error deleting auth path:', err);
+        }
     }
     connectionStatus = 'disconnected';
     qrCode = null;
+
+    // Close socket if exists
     if (socket) {
-        socket.end();
+        try {
+            socket.end();
+            socket.logout();
+        } catch (err) { }
     }
-    connectToWhatsApp();
-    res.json({ success: true });
+
+    res.json({ success: true, message: 'Gateway resetting...' });
+
+    // Exit process after a short delay so the response is sent
+    // Docker with restart:always will bring it back up fresh
+    setTimeout(() => {
+        process.exit(1);
+    }, 1000);
 });
 
 app.listen(PORT, () => {

@@ -37,18 +37,26 @@ class WhatsAppService
         }
     }
 
-    public function sendMessage($message)
+    public function sendMessage($message, $to = null)
     {
-        $groupId = Setting::get('whatsapp_group_id');
+        $jid = $to;
+
+        // If 'to' is not provided, use the default group ID from settings
+        if (!$jid) {
+            $jid = Setting::get('whatsapp_group_id');
+        } else {
+            // If it's a phone number, format it correctly for Baileys
+            $jid = $this->formatPhoneNumber($jid);
+        }
         
-        if (!$groupId) {
-            Log::warning("WhatsApp Group ID not set. Skipping message.");
+        if (!$jid) {
+            Log::warning("WhatsApp JID not set. Skipping message.");
             return false;
         }
 
         try {
             $response = Http::timeout(10)->post("{$this->baseUrl}/send", [
-                'jid' => $groupId,
+                'jid' => $jid,
                 'message' => $message
             ]);
             
@@ -57,6 +65,24 @@ class WhatsAppService
             Log::error("Failed to send WhatsApp message: " . $e->getMessage());
             return false;
         }
+    }
+
+    /**
+     * Format a phone number to WhatsApp JID format (number@s.whatsapp.net)
+     */
+    protected function formatPhoneNumber($phone)
+    {
+        // Remove non-numeric characters
+        $number = preg_replace('/[^0-9]/', '', $phone);
+
+        if (empty($number)) return null;
+
+        // Handle Indonesian numbers starting with 0
+        if (str_starts_with($number, '0')) {
+            $number = '62' . substr($number, 1);
+        }
+
+        return $number . '@s.whatsapp.net';
     }
 
     public function resetConnection()

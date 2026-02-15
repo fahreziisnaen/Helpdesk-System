@@ -17,33 +17,32 @@
                         <div class="alert alert-success">
                             <i class="fas fa-check-circle"></i> Terhubung ke WhatsApp
                         </div>
+                    @elseif(isset($status['qr']))
+                        <div class="alert alert-warning">
+                            <i class="fas fa-qrcode"></i> Scan QR Code di bawah untuk menghubungkan
+                        </div>
+                        <div class="text-center p-4 border rounded bg-light">
+                            <img src="{{ $status['qr'] }}" alt="QR Code" id="wa-qr" style="max-width: 300px;">
+                            <p class="mt-2 text-muted">QR akan terupdate otomatis jika koneksi gagal.</p>
+                        </div>
+                    @else
+                        <div class="alert alert-info">
+                            <i class="fas fa-spinner fa-spin"></i> Menghubungkan ke Gateway...
+                        </div>
+                    @endif
+
+                    <div class="mt-3 d-flex gap-2">
                         <form action="{{ route('admin.whatsapp.reset') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin mereset koneksi? Anda harus scan QR ulang.')">
                             @csrf
                             <button type="submit" class="btn btn-danger">
                                 <i class="fas fa-sync"></i> Reset WhatsApp (Ganti Nomor)
                             </button>
                         </form>
-                    @elseif(isset($status['qr']))
-                        <div class="alert alert-warning">
-                            <i class="fas fa-qrcode"></i> Scan QR Code di bawah untuk menghubungkan
-                        </div>
-                        <div class="text-center p-4 border rounded bg-light">
-                            <img src="{{ $status['qr'] }}" alt="QR Code" style="max-width: 300px;">
-                            <p class="mt-2 text-muted">QR akan terupdate otomatis jika koneksi gagal.</p>
-                        </div>
-                        <div class="mt-3">
-                             <button class="btn btn-primary" onclick="window.location.reload()">
-                                <i class="fas fa-sync"></i> Cek Status Koneksi
-                             </button>
-                        </div>
-                    @else
-                        <div class="alert alert-info">
-                            <i class="fas fa-spinner fa-spin"></i> Menghubungkan ke Gateway...
-                        </div>
-                        <button class="btn btn-primary" onclick="window.location.reload()">
-                            <i class="fas fa-sync"></i> Refresh Halaman
+                        
+                        <button class="btn btn-outline-primary" onclick="window.location.reload()">
+                            <i class="fas fa-sync"></i> Refresh Manual
                         </button>
-                    @endif
+                    </div>
                 </div>
             </div>
 
@@ -91,21 +90,34 @@
 
 @push('scripts')
 <script>
-    // Poll status every 10 seconds if not connected and QR is visible
-    @if(isset($status['qr']) || (isset($status['status']) && $status['status'] !== 'connected'))
+    let currentStatus = '{{ $status["status"] ?? "disconnected" }}';
+    let currentQr = '{{ $status["qr"] ?? "" }}';
+
+    // Poll status every 5 seconds
     setInterval(function() {
         $.ajax({
             url: '{{ route("admin.whatsapp.index") }}',
             method: 'GET',
             success: function(data) {
-                // If status changed to connected in background, reload
-                if ($(data).find('.alert-success').length > 0) {
+                const $html = $(data);
+                const newStatus = $html.find('.alert-success').length > 0 ? 'connected' : 
+                                 ($html.find('#wa-qr').length > 0 ? 'qr' : 'disconnected');
+                
+                // If status changed to connected or QR appeared/changed, reload
+                if (newStatus === 'connected' && currentStatus !== 'connected') {
+                    window.location.reload();
+                } else if (newStatus === 'qr') {
+                    const newQr = $html.find('#wa-qr').attr('src');
+                    if (newQr !== currentQr) {
+                        window.location.reload();
+                    }
+                } else if (newStatus === 'disconnected' && currentStatus !== 'disconnected') {
+                    // If it was connected/qr but now disconnected (e.g. after reset), reload
                     window.location.reload();
                 }
             }
         });
-    }, 10000);
-    @endif
+    }, 5000);
 </script>
 @endpush
 @endsection
